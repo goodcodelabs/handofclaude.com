@@ -1,0 +1,84 @@
+name: Build and Deploy Hugo Site to S3
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+# These permissions are needed to interact with GitHub's OIDC Token endpoint
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  HUGO_VERSION: '0.148.1'  # Specify your Hugo version
+  AWS_REGION: 'us-east-1'   # Change to your AWS region
+  S3_BUCKET: 'www.handofclaude.com'  # Change to your bucket name
+  CLOUDFRONT_DISTRIBUTION_ID: 'E1WPU9G236GWFA'
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive  # Needed if you use Hugo themes as submodules
+          fetch-depth: 0         # Fetch all history for .GitInfo and .Lastmod
+
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v3
+        with:
+          hugo-version: ${{ env.HUGO_VERSION }}
+          extended: true  # Set to false if you don't need Hugo Extended
+
+      - name: Build
+        run: |
+          hugo --minify --environment production
+          echo "Hugo build completed successfully"
+
+      # Only deploy on pushes to main (not on PRs)
+      - name: Configure AWS credentials using OIDC
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          role-session-name: GitHubActions-HugoDeployment
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Deploy to S3
+        run: |
+          echo "Deploying to S3 bucket: ${{ env.S3_BUCKET }}"
+          aws s3 sync ./public/ s3://${{ env.S3_BUCKET }}/ \
+            --delete \
+            --cache-control "public, max-age=31536000" \
+            --exclude "*.html" \
+            --exclude "*.xml" \
+            --exclude "*.json"
+          
+          # Set shorter cache for HTML, XML, and JSON files
+          aws s3 sync ./public/ s3://${{ env.S3_BUCKET }}/ \
+            --delete \
+            --cache-control "public, max-age=3600" \
+            --include "*.html" \
+            --include "*.xml" \
+            --include "*.json"
+
+      - name: Invalidate CloudFront cache
+        if: env.CLOUDFRONT_DISTRIBUTION_ID != ''
+        run: |
+          echo "Invalidating CloudFront distribution: ${{ env.CLOUDFRONT_DISTRIBUTION_ID }}"
+          aws cloudfront create-invalidation \
+          --distribution-id ${{ env.CLOUDFRONT_DISTRIBUTION_ID }} \
+          --paths "/*"
+          echo "CloudFront invalidation initiated"
+
+      - name: Deployment summary
+        run: |
+          echo "🚀 Deployment Summary:"
+          echo "✅ Hugo site built successfully"
+          echo "✅ Files deployed to S3 bucket: ${{ env.S3_BUCKET }}"
+          echo "🌐 Your site should be live at your configured domain"
