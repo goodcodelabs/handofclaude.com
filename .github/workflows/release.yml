@@ -16,8 +16,8 @@ permissions:
 env:
   HUGO_VERSION: '0.148.1'  # Specify your Hugo version
   AWS_REGION: 'us-east-1'   # Change to your AWS region
-  S3_BUCKET: 'www.handofclaude.com'  # Change to your bucket name
-  CLOUDFRONT_DISTRIBUTION_ID: 'E1WPU9G236GWFA'
+  S3_BUCKET: 'handofclaude.com'  # Change to your bucket name
+  CLOUDFRONT_DISTRIBUTION_ID: 'EL8P0PN3Y5W8D'
 
 jobs:
   build-and-deploy:
