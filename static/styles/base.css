@@ -1,0 +1,45 @@
+:root {
+
+    /* Colors */
+
+    --very-light-gray: rgb(230, 230, 230);
+    --very-light-gray-fade: rgb(255, 255, 255);
+    --lighter-gray: rgb(205, 205, 205);
+    --lighter-gray-fade: rgba(205, 205, 205, 0.188);
+    --contrast-gray: rgb(187, 187, 187);
+    --light-gray: rgb(117, 117, 117);
+    --light-midnight: rgb(103, 107, 121);
+    --steel-gray: rgb(62, 66, 80);
+    --gray: rgb(55, 59, 65);
+    --gray-fade: rgba(55, 59, 65, 0.6);
+    --seal: rgb(49, 53, 58);
+    --very-dark-gray: rgb(42, 44, 45);
+    --charcoal: rgb(34, 34, 35);
+
+    --blue: rgb(69, 169, 249);
+    --light-blue: rgb(111, 193, 255);
+    --purple: rgb(176, 132, 235);
+    --purple-fade: rgba(176, 132, 235, 0.376);
+    --light-purple: rgb(188, 170, 254);
+    --green: rgb(25, 249, 216);
+    --light-green: rgb(111, 231, 210);
+    --green-fade: rgba(25, 249, 216, 0.6);
+
+    --red: rgb(255, 44, 109);
+    --light-red: rgb(255, 75, 130);
+    --orange: rgb(255, 184, 108);
+    --light-orange: rgb(255, 204, 149);
+    --light-orange-fade: rgba(255, 204, 149, 0.376);
+    --pink: rgb(255, 117, 181);
+    --light-pink: rgb(255, 154, 193);
+    --light-pink-fade: rgba(255, 154, 193, 0.439);
+
+    /* Functional Style Variables */
+
+    --background-dark: var(--very-dark-gray);
+    --background-light: var(--seal);
+    --foreground: var(--very-light-gray);
+
+    --header-color: var(--pink);
+
+}

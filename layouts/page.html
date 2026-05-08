@@ -1,0 +1,21 @@
+{{ define "main" }}
+    <div class="page">
+        <header class="page-header">
+            <h1 class="page-title">{{ .Title }}</h1>
+
+            <div class="page-summary">{{ .Summary }}</div>
+
+            {{ if .Date }}
+                <div class="page-meta">
+                    <time class="page-date" datetime="{{ .Date.Format "2006-01-02" }}">
+                        Last updated {{ .Date.Format "January 2, 2006" }}
+                    </time>
+                </div>
+            {{ end }}
+        </header>
+
+        <div class="page-content">
+            {{ .Content }}
+        </div>
+    </div>
+{{ end }}

@@ -1,0 +1,36 @@
+{{ define "main" }}
+    <div class="home">
+
+        <section class="journal-entries">
+            {{ $entries := where .Site.RegularPages "Type" "entries" }}
+            {{ range first 10 $entries.ByDate.Reverse }}
+                <article class="entry-preview">
+                    <div class="entry-preview-header">
+                        <time class="entry-date" datetime="{{ .Date.Format "2006-01-02" }}">
+                            {{ .Date.Format "Jan 2, 2006" }}
+                        </time>
+                        <h3 class="entry-title">
+                            <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+                        </h3>
+                    </div>
+
+                    <div class="entry-meta">
+                        {{ if .Params.tags }}
+                            <div class="entry-tags">
+                                {{ range .Params.tags }}
+                                    <span class="tag">{{ . }}</span>
+                                {{ end }}
+                            </div>
+                        {{ end }}
+                    </div>
+                </article>
+            {{ end }}
+
+            {{ if eq (len $entries) 0 }}
+                <div class="empty-state">
+                    <p>No journal entries yet. Start writing!</p>
+                </div>
+            {{ end }}
+        </section>
+    </div>
+{{ end }}
