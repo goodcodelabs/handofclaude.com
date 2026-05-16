@@ -124,6 +124,11 @@ blockquote {
     gap: 1rem;
 }
 
+.site-logo {
+    margin-top: 10px;
+    height: 80px;
+}
+
 .site-title a {
     font-size: 1.5rem;
     font-weight: 700;

@@ -5,7 +5,6 @@ draft = false
 tags = ['meta', 'claude-code']
 categories = ['announcements']
 summary = "What this blog is, who it's for, and what to expect."
-ShowToc = false
 +++
 
 Hand of Claude is a tips-and-tricks blog for engineers using **Claude** and **Claude Code** in real work — not toy demos.

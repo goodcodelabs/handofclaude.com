@@ -59,16 +59,6 @@ buildExpired = false
 
 [menu]
   [[menu.main]]
-    identifier = "posts"
-    name = "Posts"
-    url = "/posts/"
-    weight = 10
-  [[menu.main]]
-    identifier = "tags"
-    name = "Tags"
-    url = "/tags/"
-    weight = 20
-  [[menu.main]]
     identifier = "about"
     name = "About"
     url = "/about/"

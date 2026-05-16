@@ -2,11 +2,6 @@
 title = 'About'
 date = 2026-05-07
 draft = false
-ShowToc = false
-ShowReadingTime = false
-ShowBreadCrumbs = false
-ShowWordCount = false
-hidemeta = true
 +++
 
 **Hand of Claude** is a technical blog about working with [Claude](https://www.anthropic.com/claude) and [Claude Code](https://www.claude.com/product/claude-code) — Anthropic's CLI for software engineering tasks.
