@@ -4,14 +4,8 @@ date = 2026-05-07
 draft = false
 +++
 
-**Hand of Claude** is a technical blog about working with [Claude](https://www.anthropic.com/claude) and [Claude Code](https://www.claude.com/product/claude-code) — Anthropic's CLI for software engineering tasks.
+**Hand of Claude** is a technical journal documenting my journey as I navigate this new world of [Claude](https://www.anthropic.com/claude) and [Claude Code](https://www.claude.com/product/claude-code).
 
-The goal is practical, repeatable tips: things you can drop into your workflow today. Expect posts on:
+I'm a Software Engineer currently working in the Marketing and Advertising industry trying to navigate the rapidly changing world of LLMs. This journal serves as a place to document pragmatic takes on real world use of AI in my professional and personal life. Hopefully I can shed some light on some of the reality behind the industry hype and provide practical insights into how I'm using and thinking about this new tech.
 
-- Prompt patterns that hold up under real work
-- Claude Code: hooks, slash commands, agents, MCP servers, settings
-- Editor and IDE integrations
-- API tricks: prompt caching, tool use, batch, structured outputs
-- Workflow recipes for shipping with AI in the loop
-
-If something here saves you time, that's the win.
+_**Disclaimer:** Hand of Claude is an independent publication and is not affiliated with, endorsed by, or representative of Anthropic in any way. "Claude" is a trademark of Anthropic, referenced here in a descriptive capacity. All opinions, observations, and recommendations expressed on this blog are solely my own and do not reflect the views of Anthropic or any other organization._
