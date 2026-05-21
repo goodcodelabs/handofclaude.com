@@ -359,6 +359,20 @@ blockquote {
     margin: 1rem 0;
 }
 
+.post-content .youtube-container {
+    border: 4px solid var(--purple-fade);
+    border-radius: 0.5rem;
+    margin: 1.5rem auto;
+}
+
+.post-content .youtube-container iframe {
+    border: none;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    height: auto;
+    display: block;
+}
+
 .post-content ul,
 .post-content ol {
     margin-bottom: 1rem;
