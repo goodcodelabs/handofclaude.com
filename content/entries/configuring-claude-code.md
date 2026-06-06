@@ -6,29 +6,29 @@ tags = ['ai', 'claude', 'anthropic', 'harness', 'settings']
 summary = "What is a harness, and what exactly can you configure in Claude Code? A summary of Claude Code settings that can help improve your experience and how they all work."
 +++
 
-Last time I mentioned that we'll keep getting better at building harnesses around these models. That word--harness--got a few questions, so let's slow down and unpack it. Because once you understand what a harness actually is, a lot of the magic around tools like Claude Code stops feeling like magic and starts feeling like something you can shape.
+Last time I mentioned that we'll keep getting better at building harnesses around these models. That word, "harness" is a confusing term, so let's unpack it. Once you understand what a harness actually is, a lot of the magic around tools like Claude Code stop feeling like magic and start feeling more like a useful tool to help you be more productive.
 
-## So what's a harness?
+## So what's a Harness?
 
 The model itself is just a thing that predicts text. On its own it can't read your files, run your tests, or remember what you told it yesterday. It's a pattern matching parlor trick.
 
-The harness is everything we build around the model to help guide it. It's the layer that decides what the model can see, what it's allowed to do, and what guardrails it _should_ follow. When you ask Claude Code to fix a bug, the harness is what feeds it the right files, lets it run a command, catches it before it touches something it shouldn't, and hands the result back.
+The harness is everything we build around the model to help guide it. It's the layer that decides what the model can see, what it's allowed to do, and what guardrails it _should_ follow. When you ask Claude Code to fix a bug, it is what feeds it the right files, checks for permissions to run commands, and hands the result back.
 
 Claude Code is a harness. And the nice part is that a lot of how it behaves isn't fixed--it's configurable. Once you know where those knobs live, you can tune the whole thing to fit how you actually work.
 
 ## Where your settings live
 
-Claude Code reads its configuration from a few different places, and each one exists for a reason. These are the [configuration scopes](https://code.claude.com/docs/en/settings#configuration-scopes), and the easiest way to think about them is "who is this setting for?"
+Claude Code reads its configuration from a few different places, and each one exists for a reason. These are the [configuration scopes](https://code.claude.com/docs/en/settings#configuration-scopes), and the easiest way to reason about them is by asking yourself "who is this setting for?"
 
-**User settings** live in `~/.claude/settings.json`. This is *you*, everywhere. Every project on your machine inherits these. It's the right home for personal preferences that have nothing to do with any one codebase like your preferred model, your theme and the permissions you're comfortable granting across the board. If you'd want it on a new project without thinking about it, it probably belongs here.
+**User settings** live in `~/.claude/settings.json`. This is *your settings*, everywhere. Every project on your machine inherits these. It's the right home for personal preferences that have nothing to do with any individual codebase--like your preferred model and the permissions you're comfortable granting across the board. If you'd want it on a new project without thinking about it, it probably belongs here.
 
-**Project settings** live in `.claude/settings.json` inside the repo or project folder, and they get checked into source control. This is the shared brain for the whole team. Anyone who clones the repo gets these. Think about the stuff that should be true for *everyone* working on this project: which tools are allowed, which directories are off-limits and environment variables the project depends on.
+**Project settings** live in `.claude/settings.json` inside the repo or project folder, and they should get checked into source control. This is the stuff that should be true for *everyone* working on this project: which tools are allowed, which directories are off-limits and environment variables the project depends on.
 
-**Local project settings** live in `.claude/settings.local.json`, and this one *should not* be checked in. This needs to be added to your `.gitignore`--ALWAYS. This is your personal override for a specific project. Maybe the team config allows a conservative set of commands, but you trust yourself to run a few more in this repo. Put those here, and you won't accidentally force your preferences on everyone else. Claude Code will also add any commands that you tell it to "ALWAYS" be allowed to execute to this file. 
+**Local project settings** live in `.claude/settings.local.json`, and this one *should not* be checked in. This needs to be added to your `.gitignore`--ALWAYS. This is your personal override for a specific project. Maybe the team config allows a conservative set of commands, but you trust yourself to run a few more in this repo. Put those here, and you won't accidentally force your preferences on everyone else. Claude Code will also add any commands that you tell it to "ALWAYS" be allowed to this file. 
 
-These are not always limited to the project scope, this is an open attack vector, so be careful to ensure this doesn't get committed to the repo and be cautious if you see one in a new repository.
+These are not always limited to the project scope, and such, this is an open attack vector. Be careful to ensure this doesn't get committed to the repo and be cautious if you see one in a freshly cloned repo.
 
-If you're working somewhere with IT-managed machines, there's also a **managed/enterprise** layer that administrators control. Most of us won't touch it day to day, but it's worth knowing it exists.
+If you're working somewhere with managed machines, there's generally a **managed/enterprise** layer that administrators control. Most of us won't touch it day to day, but it's worth knowing it exists.
 
 What goes *in* these files is the same across all of them: permissions for what Claude can do without asking, environment variables, hooks that run on certain events, which model to use, and a pile of smaller toggles.
 
