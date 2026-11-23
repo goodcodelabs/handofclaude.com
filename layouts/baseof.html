@@ -6,13 +6,12 @@
     <title>{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }} | {{ .Site.Title }}{{ end }}</title>
     <meta name="description" content="{{ if .Description }}{{ .Description }}{{ else }}{{ .Site.Params.description }}{{ end }}">
 
-    <!-- CSS -->
-    <link rel="stylesheet" href="{{ "styles/base.css" | relURL }}">
-    <!-- Syntax colours for code blocks. Hugo marks code up with chroma
-         classes (markup.highlight.noClasses = false), so the colours come
-         from this file: hugo gen chromastyles --style=monokai -->
-    <link rel="stylesheet" href="{{ "styles/syntax.css" | relURL }}">
-    <link rel="stylesheet" href="{{ "styles/main.css" | relURL }}">
+    <!-- CSS: one bundle, minified and fingerprinted, so a changed stylesheet
+         gets a new URL. The deploy caches static files for a year, so a fixed
+         name kept returning readers on the old styles. syntax.css holds the
+         code colours: hugo gen chromastyles --style=monokai -->
+    {{- $css := slice (resources.Get "styles/base.css") (resources.Get "styles/syntax.css") (resources.Get "styles/main.css") | resources.Concat "styles/site.css" | resources.Minify | resources.Fingerprint }}
+    <link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}">
 
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="/img/g/logo_hand.png">
@@ -39,6 +38,7 @@
 </div>
 
 <!-- JavaScript -->
-<script src="{{ "scripts/main.js" | relURL }}"></script>
+{{- $js := resources.Get "scripts/main.js" | resources.Minify | resources.Fingerprint }}
+<script src="{{ $js.RelPermalink }}" integrity="{{ $js.Data.Integrity }}"></script>
 </body>
 </html>
