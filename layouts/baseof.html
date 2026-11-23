@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }} | {{ .Site.Title }}{{ end }}</title>
-    <meta name="description" content="{{ if .Description }}{{ .Description }}{{ else }}{{ .Site.Params.description }}{{ end }}">
+    {{ partial "meta.html" . }}
 
     <!-- CSS: one bundle, minified and fingerprinted, so a changed stylesheet
          gets a new URL. The deploy caches static files for a year, so a fixed
@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}">
 
     <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="/img/g/logo_hand.png">
+    <link rel="icon" type="image/png" href="/img/g/logo_hand.png">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
