@@ -20,8 +20,9 @@
 <meta property="og:title" content="{{ cond .IsHome site.Title .Title }}">
 <meta property="og:description" content="{{ $desc }}">
 <meta property="og:url" content="{{ .Permalink }}">
-{{- $loc := split (site.Language.Locale | default "en-us") "-" }}
-<meta property="og:locale" content="{{ index $loc 0 }}{{ with index $loc 1 }}_{{ upper . }}{{ end }}">
+{{- /* Written out: CI builds with Hugo 0.148, which has no
+       site.Language.Locale, and the site is English only. */}}
+<meta property="og:locale" content="en_US">
 {{- $card := partial "share-card.html" . }}
 {{- with $card.url }}
 <meta property="og:image" content="{{ . }}">
