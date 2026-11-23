@@ -7,7 +7,10 @@
     --lighter-gray: rgb(205, 205, 205);
     --lighter-gray-fade: rgba(205, 205, 205, 0.188);
     --contrast-gray: rgb(187, 187, 187);
-    --light-gray: rgb(117, 117, 117);
+    /* Dates, meta lines, the footer and the nav use this on the dark
+       background. rgb(117,117,117) was about 3:1 against it, under the 4.5:1
+       WCAG AA asks of small text; this is about 5:1. */
+    --light-gray: rgb(155, 155, 160);
     --light-midnight: rgb(103, 107, 121);
     --steel-gray: rgb(62, 66, 80);
     --gray: rgb(55, 59, 65);
