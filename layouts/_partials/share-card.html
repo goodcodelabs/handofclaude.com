@@ -1,0 +1,63 @@
+{{- /*
+  The share card for a page: a 1200x630 PNG drawn at build time, used as
+  og:image and twitter:image. No design tool and no extra build step: the
+  hand logo is resized and padded out to a dark canvas with the site's purple
+  bar on top, then the title, date and site name are drawn on it in Inter
+  (assets/fonts, SIL Open Font License).
+
+  images.Text does not wrap, so the title is folded to about 20 characters a
+  line, which keeps the longest line clear of the hand, and capped at three lines.
+
+  Takes the page. Returns dict "url" "alt", or an empty dict if an asset is
+  missing.
+*/ -}}
+{{- $logo := resources.Get "img/logo_hand.png" -}}
+{{- $bold := resources.Get "fonts/Inter-Bold.ttf" -}}
+{{- $medium := resources.Get "fonts/Inter-Medium.ttf" -}}
+{{- $out := dict -}}
+{{- if and $logo $bold $medium -}}
+  {{- $dark := "#2a2c2d" -}}
+  {{- $purple := "#b084eb" -}}
+  {{- /* Hand at the right, vertically centred below the bar: 250x277 in a
+         1200x620 canvas, then the 10px bar on top. */ -}}
+  {{- $hand := $logo.Resize "250x" -}}
+  {{- $padTop := div (sub 620 $hand.Height) 2 -}}
+  {{- $padBottom := sub (sub 620 $hand.Height) $padTop -}}
+  {{- $img := $hand.Filter (images.Padding $padTop 80 $padBottom 870 $dark) -}}
+  {{- $img = $img.Filter (images.Padding 10 0 0 0 $purple) -}}
+
+  {{- $title := cond .IsHome "Field notes for Claude and Claude Code" .Title -}}
+  {{- $lines := slice -}}
+  {{- $line := "" -}}
+  {{- range (split $title " ") -}}
+    {{- $candidate := cond (eq $line "") . (printf "%s %s" $line .) -}}
+    {{- if le (len $candidate) 20 -}}
+      {{- $line = $candidate -}}
+    {{- else -}}
+      {{- if $line }}{{ $lines = $lines | append $line }}{{ end -}}
+      {{- $line = . -}}
+    {{- end -}}
+  {{- end -}}
+  {{- with $line }}{{ $lines = $lines | append . }}{{ end -}}
+  {{- if gt (len $lines) 3 -}}
+    {{- $lines = (first 2 $lines) | append (printf "%s…" (index $lines 2)) -}}
+  {{- end -}}
+  {{- /* Centre the title block around y=300, so one line does not float. */ -}}
+  {{- $top := sub 300 (div (mul (len $lines) 74) 2) -}}
+
+  {{- $img = $img.Filter (images.Text "HAND OF CLAUDE" (dict
+        "x" 72 "y" 72 "size" 26 "color" $purple "font" $bold)) -}}
+  {{- range $i, $l := $lines -}}
+    {{- $img = $img.Filter (images.Text $l (dict
+          "x" 72 "y" (add $top (mul $i 74)) "size" 60 "color" "#ff75b5" "font" $bold)) -}}
+  {{- end -}}
+  {{- if and .IsPage (eq .Type "entries") -}}
+    {{- $meta := printf "%s · %d min read" (.Date.Format "2 January 2006") .ReadingTime -}}
+    {{- $img = $img.Filter (images.Text $meta (dict
+          "x" 72 "y" 500 "size" 28 "color" "#e6e6e6" "font" $medium)) -}}
+  {{- end -}}
+  {{- $img = $img.Filter (images.Text "handofclaude.com" (dict
+        "x" 72 "y" 548 "size" 26 "color" "#9b9ba0" "font" $medium)) -}}
+  {{- $out = dict "url" $img.Permalink "alt" (printf "%s — Hand of Claude" $title) -}}
+{{- end -}}
+{{- return $out -}}
