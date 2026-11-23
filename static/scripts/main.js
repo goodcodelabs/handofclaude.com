@@ -80,104 +80,57 @@ function createReadingProgress() {
     });
 }
 
-function enhanceCodeBlocks() {
-    const codeBlocks = document.querySelectorAll('pre code');
-
-    codeBlocks.forEach(block => {
-        const pre = block.parentElement;
+// Each code block gets a small toolbar: its language and a copy button,
+// side by side so they never overlap. Styles are in styles/main.css.
+function toolbarFor(pre) {
+    let bar = pre.querySelector(':scope > .code-toolbar');
+    if (!bar) {
+        bar = document.createElement('div');
+        bar.className = 'code-toolbar';
         pre.style.position = 'relative';
+        pre.classList.add('has-toolbar');
+        pre.appendChild(bar);
+    }
+    return bar;
+}
 
-        // Add language label if available
-        const className = block.className;
-        const languageMatch = className.match(/language-(\w+)/);
-
-        if (languageMatch) {
-            const language = languageMatch[1];
-            const label = document.createElement('span');
-            label.textContent = language.toUpperCase();
-            label.className = 'code-language';
-
-            // Add CSS for language label
-            if (!document.querySelector('#code-enhancement-styles')) {
-                const style = document.createElement('style');
-                style.id = 'code-enhancement-styles';
-                style.textContent = `
-                    .code-language {
-                        position: absolute;
-                        top: 0.5rem;
-                        right: 0.5rem;
-                        background-color: var(--steel-gray);
-                        color: var(--green);
-                        padding: 0.25rem 0.5rem;
-                        border-radius: 0.25rem;
-                        font-size: 0.75rem;
-                        font-weight: 500;
-                        font-family: 'JetBrains Mono', monospace;
-                    }
-                    
-                    .copy-button {
-                        position: absolute;
-                        top: 0.5rem;
-                        right: 4rem;
-                        background-color: var(--steel-gray);
-                        color: var(--blue);
-                        border: none;
-                        padding: 0.25rem 0.5rem;
-                        border-radius: 0.25rem;
-                        font-size: 0.75rem;
-                        font-weight: 500;
-                        font-family: 'JetBrains Mono', monospace;
-                        cursor: pointer;
-                        transition: all 0.2s ease;
-                    }
-                    
-                    .copy-button:hover {
-                        background-color: var(--blue);
-                        color: var(--charcoal);
-                    }
-                    
-                    .copy-button.copied {
-                        background-color: var(--green);
-                        color: var(--charcoal);
-                    }
-                `;
-                document.head.appendChild(style);
-            }
-
-            pre.appendChild(label);
-        }
+function enhanceCodeBlocks() {
+    document.querySelectorAll('pre code').forEach(block => {
+        // Hugo writes the fence's language as data-lang; fall back to the class.
+        // [\w-]+ so "go-html-template" is not cut down to "go".
+        const lang = block.dataset.lang || ((block.className.match(/language-([\w-]+)/) || [])[1]);
+        if (!lang) return;
+        const label = document.createElement('span');
+        label.className = 'code-language';
+        label.textContent = lang;
+        toolbarFor(block.parentElement).appendChild(label);
     });
 }
 
 function addCopyButtons() {
-    const codeBlocks = document.querySelectorAll('pre code');
-
-    codeBlocks.forEach(block => {
-        const pre = block.parentElement;
+    if (!navigator.clipboard) return;
+    document.querySelectorAll('pre code').forEach(block => {
         const button = document.createElement('button');
+        button.type = 'button';
         button.textContent = 'Copy';
         button.className = 'copy-button';
+        button.setAttribute('aria-label', 'Copy code to clipboard');
 
         button.addEventListener('click', async () => {
             try {
                 await navigator.clipboard.writeText(block.textContent);
                 button.textContent = 'Copied!';
                 button.classList.add('copied');
-
-                setTimeout(() => {
-                    button.textContent = 'Copy';
-                    button.classList.remove('copied');
-                }, 2000);
             } catch (err) {
-                console.error('Failed to copy: ', err);
                 button.textContent = 'Error';
-                setTimeout(() => {
-                    button.textContent = 'Copy';
-                }, 2000);
             }
+            setTimeout(() => {
+                button.textContent = 'Copy';
+                button.classList.remove('copied');
+            }, 2000);
         });
 
-        pre.appendChild(button);
+        toolbarFor(block.parentElement).appendChild(button);
     });
 }
 
